@@ -13,7 +13,8 @@ const Register = () => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    // console.log(email, password);
+    const accepted = e.target.terms.checked;
+    console.log(email, password, accepted);
 
     setRegisterError("");
     setSuccess("");
@@ -23,13 +24,19 @@ const Register = () => {
         "Password should be at least 6 characters long or longer"
       );
       return;
-    }else if(!/[A-Z]/.test(password)){
-        setRegisterError('Your password should have at least one uppercase letter');
+    } else if (!/[A-Z]/.test(password)) {
+      setRegisterError(
+        "Your password should have at least one uppercase letter"
+      );
+      return;
+    } else if(!accepted){
+        setRegisterError("Please accept our terms and conditions")
         return;
     }
 
+
     // ---------------create user---------------------
-    // const auth = getAuth();
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         console.log(result.user);
@@ -54,24 +61,27 @@ const Register = () => {
         />{" "}
         <br />
         <div className="relative">
-            <input
-          className=" p-4 rounded-lg w-3/4"
-          type={showPass ? 'text' : 'password'}
-          placeholder=" Password"
-          name="password"
-          required
-        />{" "} 
-        <span className="absolute right-20 top-5" onClick={() => setShowPass(!showPass)}>{showPass ? <IoMdEyeOff /> : <IoMdEye />}
-</span>
+          <input
+            className=" p-4 rounded-lg w-3/4"
+            type={showPass ? "text" : "password"}
+            placeholder=" Password"
+            name="password"
+            required
+          />{" "}
+          <span
+            className="absolute right-20 top-5"
+            onClick={() => setShowPass(!showPass)}
+          >
+            {showPass ? <IoMdEyeOff /> : <IoMdEye />}
+          </span>
         </div>
-        
-        
-       
         <br />
         {registerError && <p className="text-red-700">{registerError}</p>}
         {success && (
           <p className="text-green-500">{success} added successfully</p>
         )}
+        <input type="checkbox" name="terms" id="" />
+        <label htmlFor="terms"> Accept our terms and conditions </label>
         <input
           className="btn btn-secondary w-3/4"
           type="submit"
